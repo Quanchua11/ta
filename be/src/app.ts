@@ -12,6 +12,9 @@ import { wordSetRouter } from './routes/word-set.routes.js'
 import { flashcardRouter, wordSetFlashcardRouter } from './routes/flashcard.routes.js'
 
 export const app = express()
+// Render forwards the original client IP through one trusted proxy.
+app.set('trust proxy', 1)
+
 const dictionaryRateLimit = rateLimit({
   windowMs: 60 * 1000,
   limit: 30,
