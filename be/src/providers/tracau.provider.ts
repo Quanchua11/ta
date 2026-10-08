@@ -102,12 +102,17 @@ export class TracauProvider implements DictionaryProvider {
     try {
       const path = autocomplete ? `a/e/${encodeURIComponent(value)}` : `s/${encodeURIComponent(value)}/en`
       const response = await fetch(`https://api.tracau.vn/${this.apiKey}/${path}`, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'HocTA/1.0',
+        },
         signal: AbortSignal.timeout(10_000),
       })
       if (response.status === 404) return null
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       return (await response.json()) as TracauResponse
-    } catch {
+    } catch (error) {
+      console.error('Tracau request failed:', error)
       throw new HttpError(502, 'TRACAU_UNAVAILABLE', 'Không kết nối được Tracau. Vui lòng thử lại sau.')
     }
   }
